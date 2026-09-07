@@ -1,0 +1,5 @@
+# 请求转发服务配置
+max_requests: 1000  # 内存中存储的最大请求数
+log_requests: true  # 是否记录请求日志
+save_to_file: false # 是否保存到文件
+output_file: requests.log  # 输出文件路径

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Request Forwarder</title>
+  <style>
+    body {
+      width: 400px;
+      padding: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    }
+    
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #e0e0e0;
+      padding-bottom: 10px;
+    }
+    
+    .title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+    
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .status-indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    
+    .status-indicator.active {
+      background-color: #4CAF50;
+    }
+    
+    .status-indicator.inactive {
+      background-color: #f44336;
+    }
+    
+    .toggle-switch {
+      position: relative;
+      width: 50px;
+      height: 26px;
+      background-color: #ccc;
+      border-radius: 13px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .toggle-switch.active {
+      background-color: #4CAF50;
+    }
+    
+    .toggle-slider {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 22px;
+      height: 22px;
+      background-color: white;
+      border-radius: 50%;
+      transition: transform 0.3s;
+    }
+    
+    .toggle-switch.active .toggle-slider {
+      transform: translateX(24px);
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    
+    .form-group label {
+      font-weight: 500;
+      color: #333;
+      font-size: 14px;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #4CAF50;
+    }
+    
+    .form-group textarea {
+      resize: vertical;
+      min-height: 60px;
+      font-family: monospace;
+    }
+    
+    .btn {
+      padding: 8px 16px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.2s;
+    }
+    
+    .btn:hover {
+      background-color: #45a049;
+    }
+    
+    .btn:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    
+    .info {
+      font-size: 12px;
+      color: #666;
+      line-height: 1.5;
+    }
+    
+    .status-text {
+      font-size: 14px;
+      font-weight: 500;
+    }
+    
+    .logs {
+      max-height: 150px;
+      overflow-y: auto;
+      background-color: #f5f5f5;
+      padding: 10px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 12px;
+      display: none;
+    }
+    
+    .logs.show {
+      display: block;
+    }
+    
+    .log-entry {
+      padding: 2px 0;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .button-group {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .btn-secondary {
+      background-color: #666;
+    }
+    
+    .btn-secondary:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <span class="title">🚀 Request Forwarder</span>
+      <div class="status">
+        <span class="status-text" id="statusText">已禁用</span>
+        <div class="toggle-switch" id="toggleSwitch">
+          <div class="toggle-slider"></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label>服务端地址</label>
+      <input type="text" id="serverUrl" placeholder="http://localhost:8080" />
+    </div>
+    
+    <div class="form-group">
+      <label>URL过滤规则（每行一个，支持正则）</label>
+      <textarea id="filterRules" placeholder="https://api.example.com/*&#10;.*\\.json$"></textarea>
+      <span class="info">留空则转发所有请求</span>
+    </div>
+    
+    <div class="button-group">
+      <button class="btn" id="saveBtn">保存配置</button>
+      <button class="btn btn-secondary" id="testBtn">测试连接</button>
+    </div>
+    
+    <div class="info">
+      <strong>使用说明：</strong>
+      1. 配置服务端地址<br>
+      2. 设置URL过滤规则（可选）<br>
+      3. 开启开关启用转发<br>
+      4. 所有匹配的请求将转发到服务端
+    </div>
+    
+    <div id="testResult" style="display:none;padding:8px;border-radius:4px;font-size:13px;"></div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
