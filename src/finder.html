@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YGE6</title>
+    <style>
+        #main {
+            height: 100%;
+            width: 80%;
+            background-color: black;
+            color: white;
+        }
+    </style>
+</head>
+<body style="display: flex; height: 100vh; margin: 0;text-align: center;">
+    <script src="./display.js"></script>
+    <script src="./get.js"></script>
+    <script src="./src/display.js"></script>
+    <script src="./src/get.js"></script>
+    <div id="leftBar" style="height: 100%;width: 20%;background-color: blue;">
+        <h1>YGE6</h1>
+        <div>
+            <button id="openFileButton">Open File</button>
+        </div>
+    </div>
+    <div id="main">
+        <div id="startGuide" style="height: 300px;width: 300px;background-color: gray;position: fixed;justify-content: center;align-items: center; top: 20%; left: 50%;text-align: center;">
+            <h3>Start Guide</h3>
+            <div style="display: flex;">
+                <div style="width: 50%;">
+                    <div id="needList" style="width: 100%;height: 100px;"></div>
+                    <button onclick="display.choseTagDialog().then(tagName => {if (tagName) needList.add(tagName);})">+</button>
+                    <button onclick="needList.remove(needList.getChose())">-</button>
+                </div>
+                <div style="width: 50%;">
+                    <div id="needNotList" style="width: 100%;height: 100px;"></div>
+                    <button onclick="display.choseTagDialog().then(tagName => {if (tagName) needNotList.add(tagName);})">+</button>
+                    <button onclick="needNotList.remove(needNotList.getChose())">-</button>
+                </div>
+            </div>
+            <div>
+                <select id="sgCount">
+                    <option value="4">4</option>
+                    <option value="9">9</option>
+                    <option value="16">16</option>
+                    <option value="20">20</option>
+                </select>
+            </div>
+            <button id="sgBtnOk">OK!</button>
+        </div>
+    </div>
+    <script>
+        function toggleSG(status) {
+            if (status) {
+                document.getElementById("startGuide").style.display = "none";
+            } else {
+                document.getElementById("startGuide").style.display = "flex";
+            }
+        }
+    </script>
+    <script>
+        const needList = new display.listWidget(document.getElementById("needList"));
+        const needNotList = new display.listWidget(document.getElementById("needNotList"));
+        document.getElementById("sgBtnOk").addEventListener("mousedown",() => {
+            geter.sendTask(needList.get(),needNotList.get(),document.getElementById("sgCount").value);
+            toggleSG(true);
+        });
+    </script>
+</body>
+</html>
